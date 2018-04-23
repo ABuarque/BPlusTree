@@ -9,7 +9,7 @@ using namespace std;
 
 SequenceSet::SequenceSet() {
 	isBlockListEmpty = true;
-	recordsQuantityPerBlock = 100; //half
+	recordsQuantityPerBlock = 1000; //half
 	totalRecordsInsideSequenceSet = 0;
 
 	recordsInCurrentBlock = 0;
