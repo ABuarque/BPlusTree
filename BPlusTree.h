@@ -66,7 +66,7 @@ private:
 		
 	class InnerNode : Node {
 	protected:
-		std::vector<Node*> children;
+		std::vector<Noednes*> children;
 
 		int binarySearch(std::vector<long> v, long key);
 
@@ -84,7 +84,22 @@ private:
 		}
 
 		void deleteSequenceSet(long key) {
-
+			Node* child = getChild(key);
+			child->deleteChild(key);
+			if(child->isUnderFlow()) {
+				Node* childLeftSibling = getChildLeftSibling(key);
+				Node* childRighttSibling = getChildRightSibling(key);
+				Node* left = childLeftSibling != NULL ? childLeftSibling : child;
+				Node* right = childLeftSibling != NULL ? child : childRighttSibling;
+				left->merge(right);
+				deleteChild(right->getFirstLeafKey());
+				if(left->isOverFlow()) {
+					Node* sibling = left->split();
+					insertChild(sibling->getFirstLeafKey(), sibling);
+				} 
+				//if(root->keysSize() == 0)
+				//	root = left;
+			}
 		}
 
 		void insertSequenceSet(long key, SequenceSet* sequenceSet);
@@ -114,7 +129,7 @@ private:
 
 	};
 
-	Node* root = NULL;
+	Node* root;
 
 	public:
 		BPlusTree() {
@@ -123,7 +138,7 @@ private:
 
 		BPlusTree(int orderFactor);
 		
-		~BPlusTree();
+		~BPlusTree() {}
 
 		std::string toString();
 	};

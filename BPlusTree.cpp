@@ -1,4 +1,6 @@
 #include "BPlusTree.h"
+#include <iostream>
+#include <cstdlib>
 
 using namespace std;
 
@@ -9,5 +11,5 @@ BPlusTree::BPlusTree(int orderFactor) {
 	//root = new LeafNode();
 }
 
-BPlusTree::~BPlusTree() {}
+//BPlusTree::~BPlusTree() {}
 
