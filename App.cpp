@@ -21,6 +21,9 @@ using namespace std;
 #define DISPLAY_SPECIFIC_FIELD 4
 #define DISPLAY_RECORD 5
 #define CLOSE_APP 6
+#define OPEN_FILE_FROM_PATH 7
+#define REBUILD_TREE 8
+#define CHECK_CONSISTENCY 9
 const string DATA_SET_PATH = "proper_data_set.csv";
 
 #define DEBUG if(true)
@@ -49,10 +52,13 @@ void deleteRecord();                                     //
 void modifyFieldInRecord();                              //
 void displayRecord();                                    //
 void displaySpecificField();                             //
+void openRecordsFromPath()                               //
+void rebuildTree();                                      //
+void checkTreeConsistency();                             //
 ///////////////////////////////////////////////////////////
 
 void sequenceSetEntryPoint() {
-	sequenceSet = bufferizeDataSet(DATA_SET_PATH);//new SequenceSet(); //bufferizeDataSet(DATA_SET_PATH);
+	sequenceSet = bufferizeDataSet(DATA_SET_PATH);
 	bool shouldRun = true;
 	while(shouldRun) {
 		system("clear || cls");
