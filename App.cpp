@@ -52,7 +52,7 @@ void deleteRecord();                                     //
 void modifyFieldInRecord();                              //
 void displayRecord();                                    //
 void displaySpecificField();                             //
-void openRecordsFromPath()                               //
+void openRecordsFromPath();                              //
 void rebuildTree();                                      //
 void checkTreeConsistency();                             //
 ///////////////////////////////////////////////////////////
@@ -105,6 +105,15 @@ void sequenceSetEntryPoint() {
 			case CLOSE_APP:
 				shouldRun = false;
 				break;
+			case CHECK_CONSISTENCY:
+				//checkTreeConsistency();
+				break;
+			case OPEN_FILE_FROM_PATH:
+				//openRecordsFromPath();
+				break;
+			case REBUILD_TREE:
+				//rebuildTree();
+				break; 
 			default:
 				shouldShowFeedBackMessage = true;
 				feedBackMessage = "Invalid paramenter";
