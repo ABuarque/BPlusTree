@@ -6,57 +6,71 @@
 #include "SequenceSet.h"
 #include <string>
 
+using namespace std;
+
 class Node {
-	protected:
-		std::vector<long> keys;
-		Node* root;
+private:
+	vector<long> keys;
+	vector<SequenceSet*> pointers;
+	Node* next;
+	Node* prev;
+	bool isLeaf;
+	int nodeSize;
 
-	public:
+public:	
 
-		Node(Node* root);
+	Node(int nodeSize, bool isLeaf) {
+		this->nodeSize = nodeSize;
+		this->isLeaf;
+	}
 
-		virtual ~Node();
+	std::vector<long> getKeys() {
+		return keys;
+	}
 
-		int keysSize();
+	void setKeys(std::vector<long> keys) {
+		this->keys = keys;
+	}
 
-		virtual SequenceSet* getSequenceSet(long key) = 0;
+	std::vector<SequenceSet*> getPointers() {
+		return pointers;
+	}
 
-		virtual void deleteSequenceSet(long key) = 0;
+	void setPointers(std::vector<SequenceSet*> pointers) {
+		this->pointers = pointers;
+	}
 
-		virtual void insertSequenceSet(long key, SequenceSet* sequenceSet) = 0;
+	Node* getNext() {
+		return next;
+	}
 
-		virtual long getFirstLeafKey() = 0;
+	void setNext(Node* next) {
+		this->next = next;
+	}
 
-		virtual std::vector<SequenceSet*> getRange(long key1, RangePolicy policy1, 
-										           long key2, RangePolicy policy2) = 0;	
+	Node* getPrev() {
+		return prev;
+	}
 
-		virtual void merge(Node* sibilingNode) = 0;
+	void setPrev(Node* prev) {
+		this->prev = prev;
+	}
 
-		virtual Node* split() = 0;
+	bool isLeaft() {
+		return isLeaf;
+	}
 
-		virtual bool isOverFlow() = 0;
+	void setLeaf(bool isLeaf) {
+		this->isLeaf = isLeaf;
+	}
 
-		virtual bool isUnderFlow() = 0;
+	int getNodeSize() {
+		return nodeSize;
+	}
 
-		virtual Node* getChild(long key) {
-			return NULL;
-		}
-
-		virtual void deleteChild(long key) {}
-
-		virtual void insertChild(long key, Node* child) {}
-
-		virtual Node* getChildLeftSibling(long key) {
-			return NULL;
-		}
-
-		virtual Node* getChildRightSibling(long key) {
-			return NULL;
-		}
-
-		int binarySearch(std::vector<long> v, long key);
-
-		std::string toString();
-	};
+	void setNodeSize(int nodeSize) {
+		this->nodeSize = nodeSize;
+	}
+};
 
 #endif
