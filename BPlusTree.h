@@ -5,6 +5,7 @@
 #include <string>
 #include "SequenceSet.h"
 #include "utils.h"
+#include "Node.h"
 
 using namespace std;
 
@@ -14,11 +15,7 @@ class BPlusTree {
 private:
 	int orderFactor;
 
-	enum RangePolicy {
-		EXCLUSIVE,
-		INCLUSIVE
-	};
-
+	/*
 	class Node {
 	protected:
 		std::vector<long> keys;
@@ -127,7 +124,7 @@ private:
 
 		Node* getChildRightSibling(long key);
 
-	};
+	}; */
 
 	Node* root;
 

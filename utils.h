@@ -3,6 +3,11 @@
 
 #include <string>
 
+enum RangePolicy {
+	EXCLUSIVE,
+	INCLUSIVE
+};
+
 /**
  * It parses a c like string (using char*) to 
  * a long in base 10.

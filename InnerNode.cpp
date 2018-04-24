@@ -4,12 +4,8 @@
 #include <string>
 
 using namespace std;
-/*
-InnerNode::InnerNode() {
-	this->keys = vector<long>();
-	this->children = vector<Node*>();
-}
 
+/*
 InnerNode::~InnerNode() {}
 
 SequenceSet* InnerNode::getSequenceSet(long key) {
@@ -30,11 +26,28 @@ void InnerNode::deleteSequenceSet(long key) {
 			Node* sibling = left->split();
 			insertChild(sibling->getFirstLeafKey(), sibling);
 		}
-		if(ro)
+		if(root->keysSize() == 0)
+			root = left;
 	}
 }
 
-void InnerNode::insertSequenceSet(long key, SequenceSet* sequenceSet) {}
+void InnerNode::insertSequenceSet(long key, 
+								  SequenceSet* sequenceSet) {
+	Node* child = getChild(key);
+	child->insertSequenceSet(key, sequenceSet);
+	if(child->isOverFlow()) {
+		Node* sibiling = child->split();
+		insertChild(sibiling->getFirstLeafKey(), sibiling);
+	}
+	if(root->isOverFlow()) {
+		Node* sibiling = split();
+		InnerNode* newRoot = new InnerNode();
+		newRoot->keys.push_back(sibiling->getFirstLeafKey());
+		newRoot->children.push_back(this);
+		newRoot->children.push_back(sibiling);
+		root = newRoot;
+	}
+}
 
 SequenceSet* InnerNode::getFirstLeafKey() {
 	return NULL;
