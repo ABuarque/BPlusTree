@@ -3,10 +3,7 @@
 
 #include <string>
 
-enum RangePolicy {
-	EXCLUSIVE,
-	INCLUSIVE
-};
+const int INITIAL_TREE_ORDER = 3;
 
 /**
  * It parses a c like string (using char*) to 
