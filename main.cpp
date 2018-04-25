@@ -6,10 +6,7 @@
 
 #include <list>
 
-#include "NativeMethods.h"
-
-
-BPlusTree* b = new BPlusTree();
+//BPlusTree* b = new BPlusTree();
 //InnerNode* innerNode = new InnerNode();
 
 
