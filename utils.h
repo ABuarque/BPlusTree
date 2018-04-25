@@ -3,6 +3,7 @@
 
 #include <string>
 
+//Initial order of a B+ tree
 const int INITIAL_TREE_ORDER = 3;
 
 /**
