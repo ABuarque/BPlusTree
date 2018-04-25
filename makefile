@@ -1,5 +1,5 @@
 CC = g++ 
-CXXFLAGS=-g -Wall -std=c++0x -I. -W -Wall 
+CXXFLAGS=-g -Wall -std=c++0x -I. -W -Wall -w
 LIBS = -lm -std=c++0x
 DEPS = $(wildcard *.h)
 SRC = $(wildcard *.cpp)
