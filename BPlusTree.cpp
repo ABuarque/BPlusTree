@@ -502,13 +502,13 @@ BPlusTree* BPlusTree::only_child() {
 	return children[0];
 }
 
-/*
-string BPlusTree::traverse() {
+
+string BPlusTree::toString() {
 	if (isLeaf) {
 		ostringstream oss;
 		//oss << '|';
 		for (size_t i = 0; i != values.size(); ++i) {
-			oss << values[i] << "  ";
+			oss << values[i]->toString() << "  ";
 		}
 		//oss << '|';
 		return oss.str();
@@ -517,12 +517,12 @@ string BPlusTree::traverse() {
 		ostringstream oss; 
 		//oss << '|';
 		for (vector<BPlusTree*>::iterator it = children.begin(); it != children.end(); ++it) {
-			oss << (*it)->traverse() << "*";
+			oss << (*it)->toString() << "*";
 		}
 		//oss << '|';
 		return oss.str();
 	}
-}*/
+}
 
 BPlusTree* inherit(BPlusTree* & _root) {
 	if (_root->empty()) {

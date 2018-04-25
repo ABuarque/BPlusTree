@@ -67,7 +67,7 @@ public:
 
 	BPlusTree* only_child();
 
-	//std::string traverse();
+	std::string toString();
 
 	std::vector<int> getKeys() {
 		return keys;
