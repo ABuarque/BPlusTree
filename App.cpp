@@ -10,6 +10,7 @@
 #include <sstream>
 #include <cmath>
 #include <iterator>
+#include "BPlusTree.h"
 #include "utils.h"
 
 using namespace std;
@@ -26,7 +27,12 @@ using namespace std;
 #define CHECK_CONSISTENCY 9
 const string DATA_SET_PATH = "proper_data_set.csv";
 
+int currentKey = 0;
+
 #define DEBUG if(true)
+
+//B+ tree reference
+BPlusTree* tree;
 
 // Sequence set object used 
 SequenceSet* sequenceSet;
@@ -38,7 +44,7 @@ void showHeader();
 void showMenu();
 
 // retrieve data from csv file and put inside SequenceSet object
-void bufferizeDataSet();
+//void bufferizeDataSet();
 
 // string reference to store feedback message
 string feedBackMessage;
@@ -53,12 +59,13 @@ void modifyFieldInRecord();                              //
 void displayRecord();                                    //
 void displaySpecificField();                             //
 void openRecordsFromPath();                              //
-void rebuildTree();                                      //
+void rebuildTreeToUser();                                //
 void checkTreeConsistency();                             //
 ///////////////////////////////////////////////////////////
 
 void sequenceSetEntryPoint() {
-	sequenceSet = bufferizeDataSet(DATA_SET_PATH);
+	tree = bufferizeDataSetToTree(DATA_SET_PATH);
+	sequenceSet = tree->search(currentKey);
 	bool shouldRun = true;
 	while(shouldRun) {
 		system("clear || cls");
@@ -112,7 +119,7 @@ void sequenceSetEntryPoint() {
 				//openRecordsFromPath();
 				break;
 			case REBUILD_TREE:
-				//rebuildTree();
+				//rebuildTreeToUser();
 				break; 
 			default:
 				shouldShowFeedBackMessage = true;
@@ -122,6 +129,7 @@ void sequenceSetEntryPoint() {
 	}
 	updateDataSet(sequenceSet, DATA_SET_PATH);
 	delete sequenceSet;
+	delete tree;
 }
 
 void insertRecord() {
@@ -148,6 +156,7 @@ void insertRecord() {
 	getchar();
 	Record* givenRecord = new Record(zipCode, state, county, placeName, latitute, longitude);
 	DEBUG cout << givenRecord->toString();
+	//insertRecordHandler(givenRecord);
 	sequenceSet->addRecord(givenRecord); //memoria  
 	appendRecord(givenRecord, "proper_data_set.csv"); // disco
 	//sequenceSet = bufferizeDataSet("proper_data_set.csv");
