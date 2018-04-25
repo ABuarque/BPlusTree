@@ -1,143 +1,81 @@
-#ifndef BPLUSTREE_H
-#define BPLUSTREE_H
+#pragma once
+#ifndef _B_PLUS_TREE_H_
+#define _B_PLUS_TREE_H_
 
 #include <vector>
 #include <string>
+#include <sstream>
+#include <stdexcept>
+#include <utility>
+#include <cassert>
 #include "SequenceSet.h"
-#include "utils.h"
-#include "Node.h"
-
-using namespace std;
-
-const int DEFAULT_ODER_FACTOR = 10;
 
 class BPlusTree {
 private:
-	int orderFactor;
+	int maxSize;
+	bool isLeaf;
+	BPlusTree* parent;
+	std::vector<int> keys;
+	std::vector<BPlusTree*> children;
+	std::vector<SequenceSet*> values;
 
-	/*
-	class Node {
-	protected:
-		std::vector<long> keys;
+	BPlusTree* split();
+	// ---------------------------------------
+	BPlusTree* bm();
 
-	public:
+	BPlusTree* borrow_left(BPlusTree* &left, const size_t& parent_pos);
+	BPlusTree* merge_left(BPlusTree* & left, const size_t& parent_pos);
+	
+	BPlusTree* borrow_right(BPlusTree* &right, const size_t& parent_pos);
+	BPlusTree* merge_right(BPlusTree* & right, const size_t& parent_pos);
+	// ---------------------------------------
+	size_t find_pos(const int&);
+	size_t find_pos(const int&)const;
 
-		Node();
+	void remove(const size_t& pos);
 
-		virtual ~Node();
+public:
+	BPlusTree(const bool& isleaf = true, BPlusTree* p = NULL,const int& size = 3);
+	BPlusTree(const bool& isleaf = true, const int& size = 3);
+	BPlusTree(const BPlusTree&);
+	BPlusTree& operator=(const BPlusTree&);
+	~BPlusTree();
 
-		int keysSize() {
-			return keys.size();
-		}
+	void set_parent(BPlusTree* p);
 
-		virtual SequenceSet* getSequenceSet(long key) = 0;
+	void set_max_size(const int &);
 
-		virtual void deleteSequenceSet(long key) = 0;
+	int getSize() {
+		return maxSize;
+	}
 
-		virtual void insertSequenceSet(long key, SequenceSet* sequenceSet) = 0;
+	SequenceSet* leftest();
 
-		virtual SequenceSet* getFirstLeafKey() = 0;
+	//int predecessor(const int&);
+	int successor(const int&);
 
-		virtual std::vector<SequenceSet*> getRange(long key1, RangePolicy policy1, 
-										   long key2, RangePolicy policy2) = 0;	
+	bool find(const int& key) const;
+	// can be modified
+	// return  > value <
+	SequenceSet* search(const int& key);
 
-		virtual void merge(Node* sibilingNode) = 0;
+	BPlusTree* insert(const int& key, SequenceSet* value);
 
-		virtual Node* split() = 0;
+	BPlusTree* del(const int& key);
 
-		virtual bool isOverFlow() = 0;
+	bool empty();
 
-		virtual bool isUnderFlow() = 0;
+	BPlusTree* only_child();
 
-		std::string toString() {
-			std::string keysState = "[ ";
-			for(long i = 0; i < keys.size(); i++) { 
-				keysState += intToString(keys[i]);
-				if((i + 1) < keys.size())
-					keysState += ", ";
-			}
-			keysState += " ]";
-			return keysState;
-		}
-	};
-		
-	class InnerNode : Node {
-	protected:
-		std::vector<Noednes*> children;
+	//std::string traverse();
 
-		int binarySearch(std::vector<long> v, long key);
+	std::vector<int> getKeys() {
+		return keys;
+	}
 
-	public:
+	friend BPlusTree* inherit(BPlusTree* &_root);
 
-		InnerNode() {
-			this->keys = vector<long>();
-			this->children = vector<Node*>();
-		}
-
-		~InnerNode() {}
-
-		SequenceSet* getSequenceSet(long key) {
-			return getChild(key)->getSequenceSet(key);
-		}
-
-		void deleteSequenceSet(long key) {
-			Node* child = getChild(key);
-			child->deleteChild(key);
-			if(child->isUnderFlow()) {
-				Node* childLeftSibling = getChildLeftSibling(key);
-				Node* childRighttSibling = getChildRightSibling(key);
-				Node* left = childLeftSibling != NULL ? childLeftSibling : child;
-				Node* right = childLeftSibling != NULL ? child : childRighttSibling;
-				left->merge(right);
-				deleteChild(right->getFirstLeafKey());
-				if(left->isOverFlow()) {
-					Node* sibling = left->split();
-					insertChild(sibling->getFirstLeafKey(), sibling);
-				} 
-				//if(root->keysSize() == 0)
-				//	root = left;
-			}
-		}
-
-		void insertSequenceSet(long key, SequenceSet* sequenceSet);
-
-		SequenceSet* getFirstLeafKey();
-
-		std::vector<SequenceSet*> getRange(long key1, RangePolicy policy1, 
-										   long key2, RangePolicy policy2);	
-
-		void merge(Node* sibilingNode);
-
-		Node* split();
-
-		bool isOverFlow();
-
-		bool isUnderFlow();
-
-		Node* getChild(long key);
-
-		void deleteChild(long key);
-
-		void insertChild(long key, Node* child);
-
-		Node* getChildLeftSibling(long key);
-
-		Node* getChildRightSibling(long key);
-
-	}; */
-
-	Node* root;
-
-	public:
-		BPlusTree() {
-			this->orderFactor = DEFAULT_ODER_FACTOR;
-		}
-
-		BPlusTree(int orderFactor);
-		
-		~BPlusTree() {}
-
-		std::string toString();
-	};
+	friend BPlusTree* rebuildTree(BPlusTree* prevTree);
+};
 
 #endif
