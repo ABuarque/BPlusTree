@@ -26,6 +26,7 @@ using namespace std;
 #define REBUILD_TREE 8
 #define CHECK_CONSISTENCY 9
 const string DATA_SET_PATH = "proper_data_set.csv";
+string givenDataSetPath;
 
 int currentKey = 0;
 
@@ -61,10 +62,12 @@ void displaySpecificField();                             //
 void openRecordsFromPath();                              //
 void rebuildTreeToUser();                                //
 void checkTreeConsistency();                             //
+void askUserForDataSetPath();                            //
 ///////////////////////////////////////////////////////////
 
 void sequenceSetEntryPoint() {
-	tree = bufferizeDataSetToTree(DATA_SET_PATH);
+	askUserForDataSetPath();
+	tree = bufferizeDataSetToTree(givenDataSetPath);
 	sequenceSet = tree->search(currentKey);
 	bool shouldRun = true;
 	while(shouldRun) {
@@ -119,7 +122,7 @@ void sequenceSetEntryPoint() {
 				//openRecordsFromPath();
 				break;
 			case REBUILD_TREE:
-				//rebuildTreeToUser();
+				rebuildTreeToUser();
 				break; 
 			default:
 				shouldShowFeedBackMessage = true;
@@ -127,9 +130,22 @@ void sequenceSetEntryPoint() {
 				break;
 		}
 	}
-	updateDataSet(sequenceSet, DATA_SET_PATH);
+	updateDataSet(sequenceSet, givenDataSetPath);
 	delete sequenceSet;
 	delete tree;
+}
+
+void askUserForDataSetPath() {
+	cout << "Type the path to data set: ";
+	getline(cin, givenDataSetPath);
+	ifstream inputStream;
+	inputStream.open(givenDataSetPath.c_str());
+	while(!inputStream.is_open()) {
+		cout << "No one file with given name has found, type it again: ";
+		getline(cin, givenDataSetPath);
+		inputStream.open(givenDataSetPath.c_str());
+	}
+	inputStream.close();
 }
 
 void insertRecord() {
@@ -156,10 +172,8 @@ void insertRecord() {
 	getchar();
 	Record* givenRecord = new Record(zipCode, state, county, placeName, latitute, longitude);
 	DEBUG cout << givenRecord->toString();
-	//insertRecordHandler(givenRecord);
 	sequenceSet->addRecord(givenRecord); //memoria  
-	appendRecord(givenRecord, "proper_data_set.csv"); // disco
-	//sequenceSet = bufferizeDataSet("proper_data_set.csv");
+	appendRecord(givenRecord, givenDataSetPath); // disco
 }
 
 void deleteRecord() {
@@ -181,6 +195,14 @@ void deleteRecord() {
 		shouldShowFeedBackMessage = true;
 		feedBackMessage = "There are no records inside the set.";
 	}
+}
+
+void openRecordsFromPath() {
+
+}
+
+void rebuildTreeToUser() {
+
 }
 
 void modifyFieldInRecord() {
