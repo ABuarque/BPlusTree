@@ -67,6 +67,10 @@ public:
 
 	BPlusTree* only_child();
 
+	std::vector<SequenceSet*> getValues() {
+		return values;
+	}
+
 	std::string toString();
 
 	std::vector<int> getKeys() {

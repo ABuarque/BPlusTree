@@ -83,14 +83,12 @@ BPlusTree* BPlusTree::split() {
 	}
 }
 
-//   doesn't merge directly, first check whether can borrow
+//doesn't merge directly, first check whether can borrow
 BPlusTree* BPlusTree::bm() {
 	size_t parent_pos = 0;
 	while (parent_pos != parent->children.size() && parent->children[parent_pos] != this) {
 		parent_pos++;
 	}
-	//assert(parent->children.size() >= 2);
-	//assert(parent_pos != parent->children.size());
 	if (parent_pos == 0) {
 		BPlusTree* &right = parent->children[parent_pos + 1];
 		if (right->keys.size() > maxSize / 2) {
@@ -126,15 +124,8 @@ BPlusTree* BPlusTree::bm() {
 	}
 }
 
-/*
- *  >> WARN: change the parent pointer when move pointer in children <<
- */
-
+//WARN: change the parent pointer when move pointer in children
 BPlusTree* BPlusTree::borrow_left(BPlusTree* &left, const size_t& parent_pos) {
-	/*
-	*  >> WARN: change the parent pointer when move pointer in children <<
-	*/
-
 	if (isLeaf) {
 		keys.insert(keys.begin(), *(left->keys.end() - 1));
 		values.insert(values.begin(), *(left->values.end() - 1));
@@ -155,11 +146,8 @@ BPlusTree* BPlusTree::borrow_left(BPlusTree* &left, const size_t& parent_pos) {
 	}
 }
 
+//change the parent pointer when move pointer in children
 BPlusTree* BPlusTree::merge_left(BPlusTree* &left, const size_t& parent_pos) {
-	/*
-	*  >> WARN: change the parent pointer when move pointer in children <<
-	*/
-	
 	if (isLeaf) {
 		vector<int> newkeys;
 		vector<SequenceSet*> newvalues;
@@ -230,11 +218,8 @@ BPlusTree* BPlusTree::merge_left(BPlusTree* &left, const size_t& parent_pos) {
 	}
 }
 
-BPlusTree* BPlusTree::borrow_right(BPlusTree* &right, const size_t& parent_pos) {
-	/*
-	*  >> WARN: change the parent pointer when move pointer in children <<
-	*/
-	
+//change the parent pointer when move pointer in children
+BPlusTree* BPlusTree::borrow_right(BPlusTree* &right, const size_t& parent_pos) {	
 	if (isLeaf) {
 		keys.push_back(right->keys[0]);
 		values.push_back(right->values[0]);
@@ -255,11 +240,8 @@ BPlusTree* BPlusTree::borrow_right(BPlusTree* &right, const size_t& parent_pos) 
 	}
 }
 
+//change the parent pointer when move pointer in children
 BPlusTree* BPlusTree::merge_right(BPlusTree* &right, const size_t& parent_pos) {
-	/*
-	*  >> WARN: change the parent pointer when move pointer in children <<
-	*/
-	
 	if (isLeaf) {
 		parent->keys.erase(parent->keys.begin() + parent_pos);
 		for (size_t i = 0; i != right->keys.size(); ++i) {
