@@ -1,7 +1,7 @@
 #ifndef NODE_H
 #define NODE_H
 
-#include <vector>
+#include <list>
 #include "utils.h"
 #include "SequenceSet.h"
 #include <string>
@@ -10,8 +10,8 @@ using namespace std;
 
 class Node {
 private:
-	vector<long> keys;
-	vector<SequenceSet*> pointers;
+	list<long> keys;
+	list<SequenceSet*> pointers;
 	Node* next;
 	Node* prev;
 	bool isLeaf;
@@ -24,19 +24,19 @@ public:
 		this->isLeaf;
 	}
 
-	std::vector<long> getKeys() {
+	std::list<long> getKeys() {
 		return keys;
 	}
 
-	void setKeys(std::vector<long> keys) {
+	void setKeys(std::list<long> keys) {
 		this->keys = keys;
 	}
 
-	std::vector<SequenceSet*> getPointers() {
+	std::list<SequenceSet*> getPointers() {
 		return pointers;
 	}
 
-	void setPointers(std::vector<SequenceSet*> pointers) {
+	void setPointers(std::list<SequenceSet*> pointers) {
 		this->pointers = pointers;
 	}
 
