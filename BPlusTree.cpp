@@ -5,7 +5,6 @@ using namespace std;
 BPlusTree* BPlusTree::split() {
 	BPlusTree* pa = new BPlusTree(false, NULL, maxSize);
 	BPlusTree *lhc = new BPlusTree(isLeaf, pa, maxSize), *rhc = new BPlusTree(isLeaf, pa, maxSize);
-	//   > split leaf node
 	if (isLeaf) {
 		for (size_t i = 0; i != keys.size() / 2; ++i) {
 			//   > do NOT move key, for future comparing
@@ -83,7 +82,6 @@ BPlusTree* BPlusTree::split() {
 	}
 }
 
-//doesn't merge directly, first check whether can borrow
 BPlusTree* BPlusTree::bm() {
 	size_t parent_pos = 0;
 	while (parent_pos != parent->children.size() && parent->children[parent_pos] != this) {
