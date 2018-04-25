@@ -2,6 +2,7 @@
 #include "RecordHandler.h"
 #include "SequenceSet.h"
 #include "Record.h"
+#include "BPlusTree.h"
 #include <string>
 #include <iostream>
 #include <set>
@@ -32,7 +33,6 @@ string recordToCSV(Record* record);
 string doubleToStringThis(double number);
 
 BPlusTree* bufferizeDataSetToTree(string dataSetPath) {
-	int availableKeys[10] = {0,0,0,0,0,0,0,0,0,0};
 	int sequenceSetIndex = 0;
 	const int MAX_BLOCKS = 10;
 	const int MAX_SEQUENCE_SETS = 10;
@@ -60,7 +60,10 @@ BPlusTree* bufferizeDataSetToTree(string dataSetPath) {
 				blocksCounter++;
 				if(blocksCounter == MAX_BLOCKS) {
 					sequenceSetIndex++;
-					sequenceSet = tree->search(sequenceSetIndex);
+					if(sequenceSetIndex < MAX_SEQUENCE_SETS)
+						sequenceSet = tree->search(sequenceSetIndex);
+					else
+						tree = rebuildTree(tree);
 				}
 			}
 		}
