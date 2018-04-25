@@ -80,6 +80,8 @@ public:
 	friend BPlusTree* inherit(BPlusTree* &_root);
 
 	friend BPlusTree* rebuildTree(BPlusTree* prevTree);
+	
+	friend BPlusTree* rebuildTree(BPlusTree* prevTree, int order);
 };
 
 #endif

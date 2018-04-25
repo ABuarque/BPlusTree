@@ -526,3 +526,13 @@ BPlusTree* rebuildTree(BPlusTree* prevTree) {
 	}
 	return newTree;
 }
+
+BPlusTree* rebuildTree(BPlusTree* prevTree, int order) {
+	BPlusTree* newTree = new BPlusTree(true, NULL, order);
+	std::vector<int> keysList = prevTree->getKeys();
+	for(std::vector<int>::iterator i = keysList.begin(); i != keysList.end(); i++) {
+		int currentKey = *(i);
+		newTree = newTree->insert(currentKey, prevTree->search(currentKey));
+	}
+	return newTree;	
+}
