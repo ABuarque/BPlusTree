@@ -21,12 +21,12 @@ using namespace std;
 #define MODIFY_FIELD_IN_RECORD 3
 #define DISPLAY_SPECIFIC_FIELD 4
 #define DISPLAY_RECORD 5
-#define CLOSE_APP 6
-#define OPEN_FILE_FROM_PATH 7
-#define REBUILD_TREE 8
-#define CHECK_CONSISTENCY 9
+#define CLOSE_APP 8
+#define REBUILD_TREE 6
+#define CHECK_CONSISTENCY 7
 const string DATA_SET_PATH = "proper_data_set.csv";
 string givenDataSetPath;
+string backupDataSetPath = "data_set_backup.csv";
 
 int currentKey = 0;
 
@@ -44,8 +44,8 @@ void showHeader();
 // Show menu
 void showMenu();
 
-// retrieve data from csv file and put inside SequenceSet object
-//void bufferizeDataSet();
+// It creates a backup for given data set
+void createDataSetBackup(SequenceSet* sequenceSet);
 
 // string reference to store feedback message
 string feedBackMessage;
@@ -61,7 +61,7 @@ void displayRecord();                                    //
 void displaySpecificField();                             //
 void openRecordsFromPath();                              //
 void rebuildTreeToUser();                                //
-void checkTreeConsistency();                             //
+void checkFileConsistency();                             //
 void askUserForDataSetPath();                            //
 ///////////////////////////////////////////////////////////
 
@@ -69,6 +69,7 @@ void sequenceSetEntryPoint() {
 	askUserForDataSetPath();
 	tree = bufferizeDataSetToTree(givenDataSetPath);
 	sequenceSet = tree->search(currentKey);
+	createDataSetBackup(sequenceSet);
 	bool shouldRun = true;
 	while(shouldRun) {
 		system("clear || cls");
@@ -116,10 +117,7 @@ void sequenceSetEntryPoint() {
 				shouldRun = false;
 				break;
 			case CHECK_CONSISTENCY:
-				//checkTreeConsistency();
-				break;
-			case OPEN_FILE_FROM_PATH:
-				//openRecordsFromPath();
+				checkFileConsistency();
 				break;
 			case REBUILD_TREE:
 				rebuildTreeToUser();
@@ -197,12 +195,45 @@ void deleteRecord() {
 	}
 }
 
-void openRecordsFromPath() {
-
+void checkFileConsistency() {
+	if(sequenceSet->getTotalRecordsInsideSequenceSet() > 0) {
+		ifstream inputStream;
+		inputStream.open(givenDataSetPath);
+		if(inputStream.is_open()) {
+			cout << "Record's file is consistent and available to use\n";
+			cout << "Press any key to get back\n";
+			getchar();
+			inputStream.close();
+			return;
+		} else {
+			cout << "Problem on handle record's file. Activating backup file.\n";
+			sequenceSet = bufferizeDataSet(backupDataSetPath);
+			inputStream.close();
+			getchar();
+			return;
+		}
+	} else {
+		shouldShowFeedBackMessage = true;
+		feedBackMessage = "There are no records inside the set.";
+	}
 }
 
 void rebuildTreeToUser() {
-
+	if(sequenceSet->getTotalRecordsInsideSequenceSet() > 0) {
+		cout << "Type new b+ tree order: ";
+		long order;
+		cin >> order;
+		getchar();
+		while(order < 2) {
+			cout << "The B+ tree order should be greater than 2, type it again: ";
+			cin >> order;
+			getchar();
+		}
+		tree = rebuildTree(tree, order);
+	} else {
+		shouldShowFeedBackMessage = true;
+		feedBackMessage = "There are no records inside the set.";
+	}
 }
 
 void modifyFieldInRecord() {
@@ -377,11 +408,17 @@ void showHeader() {
 	cout << endl;
 }
 
+void createDataSetBackup(SequenceSet* sequenceSet) {
+	updateDataSet(sequenceSet, backupDataSetPath);
+}
+
 void showMenu() {
 	cout << "1. Insert a record\n";
 	cout << "2. Delete a record\n";
 	cout << "3. Modify a field in a record\n";
 	cout << "4. Display a specific field in a record\n";
 	cout << "5. Display a record\n";	
-	cout << "6. Close app\n";
+	cout << "6. Rebuild tree\n";
+	cout << "7. Check record's file consistency\n";
+	cout << "8. Close app\n";
 }
