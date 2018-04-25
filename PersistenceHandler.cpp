@@ -31,6 +31,44 @@ string recordToCSV(Record* record);
  */
 string doubleToStringThis(double number);
 
+BPlusTree* bufferizeDataSetToTree(string dataSetPath) {
+	int availableKeys[10] = {0,0,0,0,0,0,0,0,0,0};
+	int sequenceSetIndex = 0;
+	const int MAX_BLOCKS = 10;
+	const int MAX_SEQUENCE_SETS = 10;
+	const int MAX_RECORS_PER_BLOCK = 1000;
+	long blocksCounter = 0;
+	long recordsCounter = 0;
+	BPlusTree* tree = new BPlusTree(true, NULL, INITIAL_TREE_ORDER);
+	for(int i = 0; i < 10; i++)
+		tree = tree->insert(i, new SequenceSet());
+	ifstream inputStream;
+	inputStream.open(dataSetPath.c_str());
+	SequenceSet* sequenceSet = tree->search(sequenceSetIndex);
+	if(inputStream.is_open()) {
+		string line;
+		while(!inputStream.eof()) {
+			getline(inputStream, line);
+			if(line == "") {
+				getline(inputStream, line);
+				if(line == "")
+					break;
+			}
+			sequenceSet->addRecord(csvRecordParser(line));
+			recordsCounter++;
+			if(recordsCounter == MAX_RECORS_PER_BLOCK) {
+				blocksCounter++;
+				if(blocksCounter == MAX_BLOCKS) {
+					sequenceSetIndex++;
+					sequenceSet = tree->search(sequenceSetIndex);
+				}
+			}
+		}
+	}
+	inputStream.close();
+	return tree;
+}
+
 SequenceSet* bufferizeDataSet(string dataSetPath) {
 	ifstream inputStream;
 	inputStream.open(dataSetPath.c_str());

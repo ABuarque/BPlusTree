@@ -3,6 +3,17 @@
 
 #include "SequenceSet.h"
 #include <string>
+#include "BPlusTree.h"
+
+/**
+ * It gets a path for some stored SequenceSet states
+ * to bufferize it, put inside a B+ tree object
+ * and returns it;
+ *
+ * @param path to read
+ * @return a B+ tree object
+ */
+BPlusTree* bufferizeDataSetToTree(std::string dataSetPath);
 
 /**
  * It gets a path for a stored SequenceSet state
