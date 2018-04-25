@@ -42,6 +42,8 @@ BPlusTree* bufferizeDataSetToTree(string dataSetPath) {
 	BPlusTree* tree = new BPlusTree(true, NULL, INITIAL_TREE_ORDER);
 	for(int i = 0; i < 10; i++)
 		tree = tree->insert(i, new SequenceSet());
+	//cout << "Values: " << tree->getKeys().size() << endl;
+	//getchar();
 	ifstream inputStream;
 	inputStream.open(dataSetPath.c_str());
 	SequenceSet* sequenceSet = tree->search(sequenceSetIndex);
